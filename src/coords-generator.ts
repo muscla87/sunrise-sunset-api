@@ -7,8 +7,8 @@ export default class CoordsGenerator {
 
     public generateRandomCoordinate() : LatLng {
         return {
-            latitude: getRandomIntInclusive(-90,90),
-            longitude:getRandomIntInclusive(-180,180),
+            latitude: getRandomRange(-90,90),
+            longitude:getRandomRange(-180,180),
         };
     };
 
@@ -23,8 +23,6 @@ export interface LatLng{
     longitude: number;
 }
 
-function getRandomIntInclusive(min: number, max: number) {
-    min = Math.ceil(min);
-    max = Math.floor(max);
-    return Math.random() * (max - min + 1) + min;
+function getRandomRange(min: number, max: number) {
+    return Math.random() * (max - min) + min;
 }
