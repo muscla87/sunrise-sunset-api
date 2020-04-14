@@ -1,0 +1,25 @@
+{
+  "name": "sunrise-sunset-coding-test",
+  "version": "1.0.0",
+  "description": "Coding exercise about getting sunrise and sunset times for 100 random location around the world and listing the day length of the place with the earliest sunrise time",
+  "main": "dist/app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "tsc && node dist/app.js"
+  },
+  "author": "Claudio Musumeci",
+  "license": "MIT",
+  "dependencies": {
+    "axios": "^0.19.2",
+    "express": "^4.17.1",
+    "ramda": "^0.27.0"
+  },
+  "devDependencies": {
+    "@types/axios": "^0.14.0",
+    "@types/express": "^4.17.6",
+    "@types/ramda": "^0.27.3",
+    "eslint": "^6.8.0",
+    "tslint": "^6.1.1",
+    "typescript": "^3.8.3"
+  }
+}
