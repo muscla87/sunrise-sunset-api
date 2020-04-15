@@ -19,18 +19,16 @@ app.get('/', async (req, res) => {
     const requests = coordsTransformation(randomCoordinates);
     const results = await ThrottlePromises<SunsetSunriseResult>(requests, maxParallelRequests);
     //results, even with status "OK" may return an invalid date (e.g. 1970). We are filtering out these records.
-    const todayUTCTime = new Date(new Date().getTime() + new Date().getTimezoneOffset() * 1000 * 60).setHours(0, 0, 0, 0);
-    //Exclude values that are not valid because api call threw an error
+    //Exclude also values that are not valid because api call threw an error
     const validCheckFilter = R.filter((x: SunsetSunriseResult | undefined) => {
-        return x !== undefined && x !== null && x.sunrise.getTime() >= todayUTCTime && x.sunset.getTime() >= todayUTCTime;
+        return x !== undefined && x !== null && x.sunrise.getUTCFullYear() != 1970 && x.sunset.getUTCFullYear() != 1970;
     });
 
     const validResults = validCheckFilter(results);
-    const bySunrise = R.comparator<SunsetSunriseResult>((a, b) => a.sunrise < b.sunrise);
-    const resultsByEarliestSunrise = R.sort(bySunrise, validResults);
+    const findEarliest = R.reduce<SunsetSunriseResult | null, SunsetSunriseResult>((min, current) => min != null && min.sunrise < current.sunrise ? min : current, null);
+    const earliest = findEarliest(validResults);
 
-    if (R.any(() => true, resultsByEarliestSunrise)) {
-        var earliest = resultsByEarliestSunrise[0];
+    if (earliest != null) {
         res.send('Found earliest sunrise with a day length of ' + toHHMMSS(earliest.day_length) + '<br><pre>' + JSON.stringify(earliest) + '</pre>');
     }
     else {
